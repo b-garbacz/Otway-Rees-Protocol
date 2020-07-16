@@ -1,0 +1,57 @@
+?[1mVerifpal 0.11.10 - https://verifpal.com
+?[0m  Warning • Verifpal is experimental software.
+ Verifpal • Parsing model '.\gg.vp'...
+ Verifpal • Verification initiated for '.\gg.vp' at 11:08:19 PM.
+     Info • Attacker is configured as active.
+     Info • Running at phase 0.
+Deduction • SPLIT(cb_ctxt) obtained by reconstructing with cb_ctxt.
+Deduction • SPLIT(cb_ctxt) obtained by reconstructing with cb_ctxt.
+Deduction • SPLIT(ca_ctxt) obtained by reconstructing with ca_ctxt.
+Deduction • SPLIT(ca_ctxt) obtained by reconstructing with ca_ctxt.
+Deduction • SPLIT(ENC(k2, CONCAT(r2, kc))) obtained by reconstructing with ENC(k2, CONCAT(r2, kc)). (Analysis 1)
+Deduction • SPLIT(ENC(k2, CONCAT(r2, kc))) obtained by reconstructing with ENC(k2, CONCAT(r2, kc)). (Analysis 1)
+Deduction • SPLIT(ENC(k1, CONCAT(r1, kc))) obtained by reconstructing with ENC(k1, CONCAT(r1, kc)). (Analysis 1)
+Deduction • SPLIT(ENC(k1, CONCAT(r1, kc))) obtained by reconstructing with ENC(k1, CONCAT(r1, kc)). (Analysis 1)
+   Result • confidentiality? kcb:
+           kcb (SPLIT(ENC(k2, CONCAT(r2, kc)))) is obtained by Attacker.
+ (Analysis 2)
+   Result • confidentiality? kca:
+           kca (SPLIT(ENC(k1, CONCAT(r1, kc)))) is obtained by Attacker.
+ (Analysis 2)
+Deduction • SPLIT(ENC(k2, CONCAT(SPLIT(DEC(k2, ENC(k1, CONCAT(r1, c, p1, p2)))), kc))) obtained by reconstructing with ENC(k2, CONCAT(SPLIT(DEC(k2, ENC(k1, CONCAT(r1, c, p1, p2)))), kc)). (Analysis 7)
+Deduction • SPLIT(ENC(k2, CONCAT(SPLIT(DEC(k2, ENC(k1, CONCAT(r1, c, p1, p2)))), kc))) obtained by reconstructing with ENC(k2, CONCAT(SPLIT(DEC(k2, ENC(k1, CONCAT(r1, c, p1, p2)))), kc)). (Analysis 7)
+Deduction • SPLIT(ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))) obtained by reconstructing with ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc)). (Analysis 7)
+Deduction • SPLIT(ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))) obtained by reconstructing with ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc)). (Analysis 7)
+ Analysis • Constructed skeleton CONCAT(nil, nil, nil, nil). (Analysis 8)
+ Analysis • Constructed skeleton CONCAT(SPLIT(DEC(nil, ENC(nil, CONCAT(nil, nil, nil, nil)))), nil). (Analysis 8)
+ Analysis • Constructed skeleton SPLIT(DEC(nil, ENC(nil, CONCAT(nil, nil, nil, nil)))). (Analysis 8)
+ Analysis • Constructed skeleton DEC(nil, ENC(nil, CONCAT(nil, nil, nil, nil))). (Analysis 8)
+Deduction • ENC(nil, CONCAT(nil, nil, nil, nil)) obtained by decomposing DEC(nil, ENC(nil, CONCAT(nil, nil, nil, nil))) with nil. (Analysis 9)
+   Result • authentication? Server -> Bob: cb_ctxt: When the following values are controlled by Attacker:
+           c → nil (originally c)
+           p1 → nil (originally p1)
+           p2 → nil (originally p2)
+           cb_ctxt → ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc)) (originally ENC(k2, xbc))
+           cb_ctxt (ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))), sent by Attacker and not by Server, is successfully used in DEC(k2, ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))) within Bob's state.
+ (Analysis 10)
+   Result • authentication? Bob -> Alice: ca_ctxt: When the following values are controlled by Attacker:
+           ca_ctxt → ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc)) (originally ENC(k1, xac))
+           ca_ctxt (ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))), sent by Attacker and not by Bob, is successfully used in DEC(k1, ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))) within Alice's state.
+ (Analysis 10)
+Deduction • SPLIT(ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, nil, nil, nil)))), kc))) obtained by reconstructing with ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, nil, nil, nil)))), kc)). (Analysis 13)
+Deduction • SPLIT(ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, nil, nil, nil)))), kc))) obtained by reconstructing with ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, nil, nil, nil)))), kc)). (Analysis 14)
+   Result • authentication? Server -> Bob: cb_ctxt: When the following values are controlled by Attacker:
+           c → nil (originally c)
+           p1 → nil (originally p1)
+           p2 → nil (originally p2)
+           cb_ctxt → ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc)) (originally ENC(k2, xbc))
+           cb_ctxt (ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))), sent by Attacker and not by Server, is successfully used in DEC(k2, ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))) within Bob's state.
+   Result • authentication? Bob -> Alice: ca_ctxt: When the following values are controlled by Attacker:
+           ca_ctxt → ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc)) (originally ENC(k1, xac))
+           ca_ctxt (ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))), sent by Attacker and not by Bob, is successfully used in DEC(k1, ENC(k1, CONCAT(SPLIT(DEC(k1, ENC(k2, CONCAT(r2, c, p1, p2)))), kc))) within Alice's state.
+   Result • confidentiality? kcb:
+           kcb (SPLIT(ENC(k2, CONCAT(r2, kc)))) is obtained by Attacker.
+   Result • confidentiality? kca:
+           kca (SPLIT(ENC(k1, CONCAT(r1, kc)))) is obtained by Attacker.
+ Verifpal • Verification completed for '.\gg.vp' at 11:08:19 PM.
+ Verifpal • Thank you for using Verifpal.
