@@ -1,0 +1,106 @@
+attacker[active]
+
+principal Server[]
+principal Alice[]
+principal Bob[]
+
+//Krok1
+// A- Alice , B- Bob
+
+principal Alice[
+	//Alice zna C,P1,P2
+	knows private C,P1,P2 
+	//Alice zna Swój nonce i Swój klucz 
+	knows private R1,K1	
+	//CONCAT- dodatnie do siebie tych wartości
+	xa = CONCAT(R1,C,P1,P2)	
+							   
+	//Szyfrowanie przy pomocy AES
+	A_ctxt = ENC(K1,xa)	
+	
+]
+//A wysyła do B - C,P1,P2M,A_ctxt
+Alice -> Bob:C,P1,P2,A_ctxt 
+
+//krok2
+
+
+principal Bob[
+
+	// Bob otrzyma C,P1,P2  
+	// Zna  Swój nonce i klucz
+	knows private R2,K2  
+	
+	xb = CONCAT(R2,C,P1,P2) // -//-
+	
+	B_ctxt = ENC(K2,xb) // -//-
+	
+
+]
+// Bob wysyła C,P1,P2, i dwie zaszyfrowane wiadomości od A i B 
+
+Bob -> Server:C,P1,P2,A_ctxt,B_ctxt 
+
+
+principal Server[
+	// serwer zna ich wszystkie wartości
+	knows private C,P1,P2,K1,K2		 
+	//Serwer generuje wspólny klucz do komunikacji dla A i B 
+	generates  KC					
+	//Server deszyfruje wiadomość od  A
+	A_ptxt = DEC(K1,A_ctxt)			
+	//Serwer rozdziela wcześniej połączoną przez CONCAT wiadomość
+	RC_1,C_C,P1_1,P2_2 = SPLIT(A_ptxt)   
+	// RC_1= R1, C_C = C P1_1 = P1, P2_22 = P2
+	
+	// serwer łączy nonce i klucz wygenerowany dla A i B
+	xac=CONCAT(RC_1,KC)	
+	// Wiad. Dla Alice
+	CA_ctxt=ENC(K1,xac)				
+	
+	// Powtórzenie tej samej czynności dla B
+	B_ptxt=DEC(K2,B_ctxt)			
+	RC_2,C_CC,P1_11,P2_22 = SPLIT(B_ptxt)
+	xbc=CONCAT(RC_2,KC)
+	CB_ctxt=ENC(K2,xbc)//Dla Boba
+
+]
+
+// Serwer wysyła do B zaszyfrowane wiadomości w których znajdują się
+// Klucze i nonce dla A i B 
+Server -> Bob: CA_ctxt,CB_ctxt		
+									
+
+principal Bob[
+	//Bob deszyfruje Wiadomość od serwera za pomocą swojego klucza
+	CB_ptxt=DEC(K2,CB_ctxt)		
+	
+	// Rozdziela z wiadomości swój nonce i klucz wygenerowany przez
+	// do komunikacji z Alice 
+	RC_2_final,KCB=SPLIT(CB_ctxt)	
+									
+
+]
+
+Bob -> Alice: CA_ctxt // Alice nie chce przyjąć C bo już je zna 
+
+principal Alice[
+	CA_ptxt=DEC(K1,CA_ctxt)			// -//-
+	RC_1_final,KCA=SPLIT(CA_ctxt)	//-//-
+
+]
+
+
+queries[
+	
+	
+	authentication? Server -> Bob: CB_ctxt
+	authentication? Bob -> Alice: CA_ctxt
+
+	confidentiality? KCB 
+	confidentiality? KCA
+]
+
+
+
+
